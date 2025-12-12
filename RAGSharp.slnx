@@ -1,8 +1,7 @@
 <Solution>
-  <Project Path="RAGSharp.Console/RAGSharp.Console.csproj" />
   <Project Path="RAGSharp.Providers/RAGSharp.Providers.csproj" />
   <Project Path="RAGSharp.Storage/RAGSharp.Storage.csproj" />
   <Project Path="RAGSharp.Tests/RAGSharp.Tests.csproj" />
-  <Project Path="RAGSharp.WebAPI/RAGSharp.WebAPI.csproj" />
+  <Project Path="RAGSharp.WebAPI/RAGSharp.WebAPI.csproj" Id="3b0d861e-2667-4db5-9a19-f61ba0dcae69" />
   <Project Path="RAGSharp/RAGSharp.Core.csproj" />
 </Solution>

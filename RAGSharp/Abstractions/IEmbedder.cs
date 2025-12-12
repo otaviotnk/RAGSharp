@@ -2,7 +2,7 @@
 
 namespace RAGSharp.Core.Abstractions
 {
-    internal interface IEmbedder
+    public interface IEmbedder
     {
         /// <summary>Returns embedding vector for a single text.</summary>
         Task<EmbeddingVector> EmbedAsync(string id, string text, CancellationToken cancellationToken = default);

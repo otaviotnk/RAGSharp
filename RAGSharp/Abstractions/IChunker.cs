@@ -2,7 +2,7 @@
 
 namespace RAGSharp.Core.Abstractions
 {
-    internal interface IChunker
+    public interface IChunker
     {
         /// <summary>Splits a document into chunks ready to embed and store.</summary>
         Task<IReadOnlyList<Chunk>> ChunkAsync(Document document, CancellationToken cancellationToken = default);

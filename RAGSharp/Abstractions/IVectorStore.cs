@@ -2,7 +2,7 @@
 
 namespace RAGSharp.Core.Abstractions
 {
-    internal interface IVectorStore
+    public interface IVectorStore
     {
         Task UpsertAsync(IEnumerable<EmbeddingVector> vectors, CancellationToken cancellationToken = default);
         Task DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default);

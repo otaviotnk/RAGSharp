@@ -2,7 +2,7 @@
 
 namespace RAGSharp.Core.Abstractions
 {
-    internal interface IRagPipeline
+    public interface IRagPipeline
     {
         /// <summary>Ingest a document: chunk -> embed -> store</summary>
         Task IngestDocumentAsync(Document doc, CancellationToken cancellationToken = default);
