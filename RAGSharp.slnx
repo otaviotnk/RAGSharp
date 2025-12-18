@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="Readme.md" />
+  </Folder>
   <Project Path="RAGSharp.Providers/RAGSharp.Providers.csproj" />
   <Project Path="RAGSharp.Storage/RAGSharp.Storage.csproj" />
   <Project Path="RAGSharp.Tests/RAGSharp.Tests.csproj" />

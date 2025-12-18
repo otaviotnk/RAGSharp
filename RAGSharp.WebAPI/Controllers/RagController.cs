@@ -24,11 +24,7 @@ namespace RAGSharp.WebAPI.Controllers
             _chunker = chunker;
             _logger = logger;
         }
-
-        /// <summary>
-        /// Indexa (ingest) um documento via pipeline RAG: chunk -> embed -> store.
-        /// Usa IRagPipeline.IngestDocumentAsync (assume pipeline realiza chunk/embed/upsert).
-        /// </summary>
+       
         [HttpPost("index")]
         public async Task<IActionResult> IndexDocument([FromBody] IndexRequest request, CancellationToken cancellationToken)
         {
@@ -49,11 +45,7 @@ namespace RAGSharp.WebAPI.Controllers
 
             return Ok(new { Message = "Document ingested.", DocumentId = doc.Id });
         }
-
-        /// <summary>
-        /// Query via pipeline RAG: IRagPipeline.QueryAsync
-        /// Retorna QueryResult (Answer + Retrieved chunks).
-        /// </summary>
+       
         [HttpPost("query")]
         public async Task<IActionResult> Query([FromBody] QueryRequest request, CancellationToken cancellationToken)
         {
@@ -67,22 +59,16 @@ namespace RAGSharp.WebAPI.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Endpoint opcional: indexar manualmente chunks no VectorStore.
-        /// Útil para debugging quando você quer controlar chunking/upsert diretamente.
-        /// </summary>
         [HttpPost("index/manual-chunks")]
         public async Task<IActionResult> IndexManualChunks([FromBody] ManualChunksRequest request, CancellationToken cancellationToken)
         {
             if (request.Chunks == null || request.Chunks.Count == 0)
                 return BadRequest(new { Error = "Chunks are required." });
-
-            // Converter para EmbeddingVector placeholders (se você tiver embedder, normalmente faria embed antes do upsert)
-            // Aqui apenas criamos EmbeddingVector com vector vazio (ex.: for debug) — ideal é usar pipeline/inject embedder.
+       
             var vectors = request.Chunks.Select((c, i) =>
                 new EmbeddingVector(
                     Id: c.Id ?? Guid.NewGuid().ToString("n"),
-                    Vector: Array.Empty<float>(), // ideal: preencher após embedder
+                    Vector: Array.Empty<float>(),
                     PayloadJson: System.Text.Json.JsonSerializer.Serialize(new { c.DocumentId, c.Index, preview = c.Text?.Substring(0, Math.Min(80, c.Text?.Length ?? 0)) })
                 )
             ).ToList();
@@ -93,29 +79,20 @@ namespace RAGSharp.WebAPI.Controllers
         }
     }
 
-    /// <summary>
-    /// Request para index (usa pipeline IngestDocumentAsync)
-    /// </summary>
     public class IndexRequest
     {
-        public string? Id { get; set; }            // opcional: id personalizado
+        public string? Id { get; set; }
         public string? Title { get; set; }
         public string? Source { get; set; }
         public string Content { get; set; } = "";
     }
 
-    /// <summary>
-    /// Request para query
-    /// </summary>
     public class QueryRequest
     {
         public string Query { get; set; } = "";
         public int? TopK { get; set; }
     }
 
-    /// <summary>
-    /// Request para inserir manualmente chunks (debugging)
-    /// </summary>
     public class ManualChunksRequest
     {
         public List<ManualChunk> Chunks { get; set; } = new();

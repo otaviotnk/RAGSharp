@@ -10,6 +10,7 @@ public class SimpleRagPipeline : IRagPipeline
     private readonly IEmbedder _embedder;
     private readonly IVectorStore _vectorStore;
     private readonly ILLMClient _llm;
+
     // local in-memory mapping id->Chunk to get chunk text (for InMemory vector store POC)
     private readonly Dictionary<string, Chunk> _chunkIndex = new();
 

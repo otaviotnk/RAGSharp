@@ -1,4 +1,5 @@
 ﻿using RAGSharp.Core.Abstractions;
+
 namespace RAGSharp.Providers.Mock;
 
 public class MockLLMClient : ILLMClient

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RAGSharp.Core.Abstractions;
+using RAGSharp.Core.Models;
 using System.Security.Cryptography;
 using System.Text;
-using RAGSharp.Core.Abstractions;
-using RAGSharp.Core.Models;
 
 namespace RAGSharp.Providers.Mock
 {
