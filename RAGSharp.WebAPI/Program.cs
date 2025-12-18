@@ -1,6 +1,7 @@
 using RAGSharp.Core.Abstractions;
 using RAGSharp.Core.Extensions;
 using RAGSharp.Providers.Mock;
+using RAGSharp.Providers.OpenAI;
 using RAGSharp.Storage.InMemory;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +20,12 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-
+builder.Services.AddOpenAI(options =>
+{
+    options.ApiKey = builder.Configuration["OpenAI:ApiKey"]!;
+    options.ChatModel = builder.Configuration["OpenAI:ChatModel"]!;
+    options.EmbeddingModel = builder.Configuration["OpenAI:EmbeddingModel"]!;
+});
 
 
 var app = builder.Build();
