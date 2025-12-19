@@ -1,9 +1,6 @@
 ﻿using RAGSharp.Core.Abstractions;
 using RAGSharp.Core.Models;
-using System;
-using System.Collections.Generic;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 
 namespace RAGSharp.Providers.OpenAI
@@ -18,7 +15,6 @@ namespace RAGSharp.Providers.OpenAI
             _http = http;
             _options = options;
         }
-
 
         public async Task<EmbeddingVector> EmbedAsync(string id, string text, CancellationToken ct = default)
         {
@@ -43,8 +39,6 @@ namespace RAGSharp.Providers.OpenAI
                 .RootElement
                 .GetProperty("data")[0]
                 .GetProperty("embedding");
-
-            //return embedding.EnumerateArray().Select(x => x.GetSingle()).ToArray();
 
             var vector = embedding.EnumerateArray().Select(x => x.GetSingle()).ToArray();
 
