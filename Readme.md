@@ -23,3 +23,23 @@ O projeto foi desenvolvido como **demonstração arquitetural**, mostrando como 
 
 ## 🧱 Arquitetura
 
+RAGSharp
+├── Core
+│ ├── Abstractions
+│ │ ├── IChunker
+│ │ ├── IEmbedder
+│ │ ├── IVectorStore
+│ │ ├── ILLMClient
+│ │ └── IRagPipeline
+│ ├── Models
+│ ├── Pipelines
+│ └── Extensions
+│
+├── Providers
+│ └── Mock
+│
+├── Storage
+│ └── InMemory
+│
+└── Api
+└── Controllers
