@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using RAGSharp.Core.Abstractions;
+using RAGSharp.Core.Enums;
 using RAGSharp.Core.Models;
 
 namespace RAGSharp.Core.Pipelines;
@@ -9,17 +10,17 @@ public class SimpleRagPipeline : IRagPipeline
     private readonly IChunker _chunker;
     private readonly IEmbedder _embedder;
     private readonly IVectorStore _vectorStore;
-    private readonly ILLMClient _llm;
+    private readonly ILLMClientFactory _llmFactory;
 
     // local in-memory mapping id->Chunk to get chunk text (for InMemory vector store POC)
     private readonly Dictionary<string, Chunk> _chunkIndex = new();
 
-    public SimpleRagPipeline(IChunker chunker, IEmbedder embedder, IVectorStore vectorStore, ILLMClient llm)
+    public SimpleRagPipeline(IChunker chunker, IEmbedder embedder, IVectorStore vectorStore, ILLMClientFactory llmFactory)
     {
         _chunker = chunker;
         _embedder = embedder;
         _vectorStore = vectorStore;
-        _llm = llm;
+        _llmFactory = llmFactory;
     }
 
     public async Task IngestDocumentAsync(Document doc, CancellationToken cancellationToken = default)
@@ -43,7 +44,7 @@ public class SimpleRagPipeline : IRagPipeline
         await _vectorStore.UpsertAsync(withPayload, cancellationToken);
     }
 
-    public async Task<QueryResult> QueryAsync(string userQuery, int topK = 5, CancellationToken cancellationToken = default)
+    public async Task<QueryResult> QueryAsync(string userQuery, int topK = 5, LlmProvider? provider = null, CancellationToken cancellationToken = default)
     {
         // 1) embed query
         var qEmbedding = await _embedder.EmbedAsync($"query_{Guid.NewGuid()}", userQuery, cancellationToken);
@@ -80,7 +81,8 @@ public class SimpleRagPipeline : IRagPipeline
         sb.AppendLine("--- End Context ---");
 
         var prompt = sb.ToString();
-        var answer = await _llm.GenerateAsync(prompt, cancellationToken);
+        var llm = _llmFactory.GetClient(provider?.ToString().ToLowerInvariant());
+        var answer = await llm.GenerateAsync(prompt, cancellationToken);
 
         return new QueryResult(answer, resolved, prompt);
     }

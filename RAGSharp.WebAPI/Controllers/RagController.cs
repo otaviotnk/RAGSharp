@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RAGSharp.Core.Abstractions;
 using RAGSharp.Core.Models;
+using RAGSharp.WebAPI.Models;
 
 namespace RAGSharp.WebAPI.Controllers
 {
@@ -54,7 +55,7 @@ namespace RAGSharp.WebAPI.Controllers
 
             _logger.LogInformation("Running query: {Query}", request.Query);
 
-            var result = await _pipeline.QueryAsync(request.Query, request.TopK ?? 5, cancellationToken);
+            var result = await _pipeline.QueryAsync(request.Query, request.TopK ?? 5, request.Provider, cancellationToken);
 
             return Ok(result);
         }
@@ -77,32 +78,5 @@ namespace RAGSharp.WebAPI.Controllers
 
             return Ok(new { Message = "Manual chunks upserted.", Count = vectors.Count });
         }
-    }
-
-    public class IndexRequest
-    {
-        public string? Id { get; set; }
-        public string? Title { get; set; }
-        public string? Source { get; set; }
-        public string Content { get; set; } = "";
-    }
-
-    public class QueryRequest
-    {
-        public string Query { get; set; } = "";
-        public int? TopK { get; set; }
-    }
-
-    public class ManualChunksRequest
-    {
-        public List<ManualChunk> Chunks { get; set; } = new();
-    }
-
-    public class ManualChunk
-    {
-        public string? Id { get; set; }
-        public string DocumentId { get; set; } = Guid.NewGuid().ToString("n");
-        public int Index { get; set; }
-        public string? Text { get; set; }
     }
 }

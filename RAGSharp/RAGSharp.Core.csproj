@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="LLM\" />
     <Folder Include="Retrieval\" />
     <Folder Include="Embedding\" />
   </ItemGroup>

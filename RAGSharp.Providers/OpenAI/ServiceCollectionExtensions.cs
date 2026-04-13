@@ -21,14 +21,21 @@ namespace RAGSharp.Providers.OpenAI
                     new AuthenticationHeaderValue("Bearer", options.ApiKey);
             });
 
-            services.AddHttpClient<OpenAILLMClient>(client =>
+            services.AddHttpClient("openai-llm", client =>
             {
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", options.ApiKey);
             });
 
             services.AddSingleton<IEmbedder, OpenAIEmbedder>();
-            services.AddSingleton<ILLMClient, OpenAILLMClient>();
+
+            services.AddKeyedSingleton<ILLMClient>("openai", (sp, _) =>
+                new OpenAILLMClient(
+                    sp.GetRequiredService<IHttpClientFactory>().CreateClient("openai-llm"),
+                    options));
+
+            services.AddSingleton<ILLMClient>(sp =>
+                sp.GetRequiredKeyedService<ILLMClient>("openai"));
 
             return services;
         }
